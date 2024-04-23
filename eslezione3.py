@@ -5,16 +5,16 @@ def stampad(d):
 def stampal(l):
     for i in l:
         print(i) 
-"""
+
 #4.1
-pizze=["Margherita","Diavola","Crostino"]
+pizze=["margherita","diavola","crostino"]
 stampal(pizze)
 for i in pizze:
     print("Mi piace la piza",i)
 print("I like ",pizze[0])
 print("My favourite pizza is ",pizze[1])
 print("I hate ",pizze[2])
-
+"""
 #4.2
 animals=["dog","cat","bunny"]
 stampal(animals)
@@ -58,4 +58,13 @@ for i in range(1,11):
 cubes=[i**3 for i in range(1,11)]
 print(cubes)
 
-#4.10
+#4.11
+friend_pizzas=pizze.copy()
+pizze.append("boscaiola")
+friend_pizzas.append("funghi")
+for i in pizze:
+    print("My favourite pizza are",i)
+for i in friend_pizzas:
+    print("My friend's favourite pizza are",i)
+
+#4.15
