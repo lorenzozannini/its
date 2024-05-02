@@ -33,3 +33,7 @@ def number_game(n):
         i+=1
     return "tentativi esauriti"
 print(number_game(3))
+
+#3
+def shopping_cart():
+    
