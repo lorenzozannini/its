@@ -1,3 +1,5 @@
+"""
+#1
 class Person:
     def __init__(self,name,age):
         self.name=name
@@ -37,6 +39,7 @@ print(people[k].hobby)
 people[k].remove_hobby("ciao")
 print(people[k].hobby)
 
+#2
 class Student:
     def __init__(self,name,studyProgram,age,gender):
         self.name=name
@@ -52,6 +55,7 @@ s2=Student("Davide",7,19,"M")
 s3=Student("Munir",9,23,"M")
 s3.printInfo()
 
+#3
 class Animals:
     def __init__(self,name,legs):
         self.name=name
@@ -63,7 +67,6 @@ class Animals:
     def printInfo(self):
         print(f"(Name={self.name}, Legs={self.legs})")
 
-
 cat=Animals("Cat",4)
 dog=Animals("Dog",4)
 print(cat.name)
@@ -74,3 +77,44 @@ cat.setLegs(7)
 print(cat.legs)
 print(cat.getLegs())
 cat.printInfo()
+"""
+#4
+class Food:
+    def __init__(self,name,price,description):
+        self.name=name
+        self.price=price
+        self.description=description
+
+pizza=Food("Pizza",10,"aaaa")
+pasta=Food("Pasta",8,"bbbbb")
+panino=Food("Panino",5,"ccc")
+foods=[pizza,pasta,panino]
+class Menu:
+    def __init__(self,foods=[]):
+        self.foods=foods
+    def addFood(self,addfood):
+        self.foods.append(addfood)
+    def removeFood(self,removefood):
+         if removefood in self.foods:
+            self.foods.remove(removefood)
+    def printInfo(self):
+        print("Menu:")
+        for i in self.foods:
+            print(f"(Name={i.name}, Price={i.price}, Description={i.description})")
+    def getAveragePrice(self):
+        somma=0
+        average=0
+        for i in self.foods:
+            somma+=i.price
+        average=somma/len(self.foods)
+        return average
+menu=Menu(foods)
+print(menu.printInfo())
+menu.addFood(Food("Sale",3,"dddd"))
+print(menu.printInfo())
+menu.removeFood(pizza)
+print(menu.printInfo())
+menu.addFood(Food("Pepe",7,"eeeee"))
+menu.addFood(Food("Hamburger",11,"fffff"))
+menu.printInfo()
+print(menu.getAveragePrice())
