@@ -93,7 +93,13 @@ class Menu:
     def __init__(self,foods=[]):
         self.foods=foods
     def addFood(self,addfood):
-        self.foods.append(addfood)
+        count=0
+        for i in self.foods:
+            if addfood.name ==i.name:
+                i.price=addfood.price
+                count+=1
+        if count==0:
+            self.foods.append(addfood)
     def removeFood(self,removefood):
          if removefood in self.foods:
             self.foods.remove(removefood)
@@ -114,7 +120,7 @@ menu.addFood(Food("Sale",3,"dddd"))
 print(menu.printInfo())
 menu.removeFood(pizza)
 print(menu.printInfo())
-menu.addFood(Food("Pepe",7,"eeeee"))
+menu.addFood(Food("Sale",7,"eeeee"))
 menu.addFood(Food("Hamburger",11,"fffff"))
 menu.printInfo()
 print(menu.getAveragePrice())
