@@ -85,7 +85,6 @@ class ZooKeeper:
             tempo=fence.area/(fence.maxarea-fence.area)
             return tempo
 
-        
 
 z=ZooKeeper(name="Lorenzo", surname="Maggi", id=1234)
 f=Fence(area=100, temperature=25, habitat="Continent")
