@@ -14,7 +14,7 @@ class Animal:
         self.healt=100*(1/age)
     
     def __str__(self) -> str:
-        return f"(Name={self.name}, Species={self.species}, Age={self.age}, Height={self.height})"
+        return f"(Name={self.name}, Species={self.species}, Age={self.age}, Height={self.height}, Width={self.width}, Preferred habitat= {self.preferred_habitat}, Healt={self.healt})"
 
 class Fence:
     def __init__(self,area,temperature,habitat,animals=[]):
@@ -22,9 +22,10 @@ class Fence:
         self.temperature=temperature
         self.tipo_habitat=habitat
         self.animals=animals
+        self.maxarea=area
     
     def __str__(self) -> str:
-        r=f"(area={self.area})"
+        r=f"(Area={self.area})"
         for animal in self.animals:
             r += animal.__str__()+"\n"
         return r
@@ -47,10 +48,22 @@ class ZooKeeper:
         for fence in zoo.fences:
             if animale in fence.animals:
                 fence.animals.remove(animale)
-                fence.area+=(animale.height*animale.width)
+                if fence.area+(animale.height*animale.width)>fence.maxarea:
+                    fence.area=fence.maxarea
+                else:
+                    fence.area+=(animale.height*animale.width)
     
-    def feed(self):
-        pass
+    def feed(self,animale):
+        for fence in zoo.fences:
+            if animale in fence.animals:
+                for animal in fence.animals:
+                    if animal==animale:
+                        if ((((animal.height)/100)*102)+(((animal.width)/100)*102))<fence.area:
+                            animal.healt=(((animal.healt)/100)*101)
+                            animal.height=(((animal.height)/100)*102)
+                            animal.width=(((animal.width)/100)*102)
+        
+
 z=ZooKeeper(name="Lorenzo", surname="Maggi", id=1234)
 f=Fence(area=100, temperature=25, habitat="Continent")
 zoo=Zoo(f,z)
@@ -58,5 +71,7 @@ scoiattolo=Animal(name="Scoiattolo", species="Blabla", age=25, height=1,width=2,
 z.add_animal(scoiattolo)
 print(f.__str__())
 z.add_animal(scoiattolo)
+z.feed(scoiattolo)
+print(f.__str__())
 z.remove_animal(scoiattolo)
 print(f.__str__())
