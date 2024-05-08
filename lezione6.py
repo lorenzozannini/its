@@ -1,4 +1,3 @@
-"""
 class Person:
     def __init__(self,name,age):
         self.name=name
@@ -51,7 +50,7 @@ class Student:
 s1=Student("Lorenzo",10,19,"M")
 s2=Student("Davide",7,19,"M")
 s3=Student("Munir",9,23,"M")
-s3.printInfo()"""
+s3.printInfo()
 
 class Animals:
     def __init__(self,name,legs):
