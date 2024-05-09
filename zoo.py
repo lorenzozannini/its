@@ -9,8 +9,9 @@ class Zoo:
             r+=guardian.__str__()+"\n\n"
         r+="Fences:\n\n"
         for fence in self.fences:
-            r+=fence.__str__()
-            r+="#"*30+"\n\n"
+            if fence.animals!=[]:
+                r+=fence.__str__()
+                r+="#"*30+"\n\n"
         return r
  
 class Animal:
@@ -35,12 +36,11 @@ class Fence:
         self.maxarea=area
     
     def __str__(self):
-        if self.animals!=[]:
-            r=f"Fence(area={self.area}, temperature={self.temperature}, habitat={self.tipo_habitat})\n\n"
-            r+="with animals:\n\n"
-            for animal in self.animals:
-                r += animal.__str__()+"\n\n"
-            return r
+        r=f"Fence(area={self.area}, temperature={self.temperature}, habitat={self.tipo_habitat})\n\n"
+        r+="with animals:\n\n"
+        for animal in self.animals:
+            r += animal.__str__()+"\n\n"
+        return r
 
 class ZooKeeper:
     def __init__(self,name,surname,id):
@@ -52,34 +52,38 @@ class ZooKeeper:
         return f"ZooKeeper(name={self.name}, surname={self.surname}, id={self.id})"
 
     def add_animal(self,animale):
+        count=0
         for fence in zoo.fences:
             if animale not in fence.animals:
                 if fence.tipo_habitat ==animale.preferred_habitat:
                     if fence.area>=(animale.height*animale.width):
-                        fence.animals.append(animale)
-                        fence.area-=(animale.height*animale.width)
+                        if count==0:
+                            fence.animals.append(animale)
+                            fence.area-=(animale.height*animale.width)
+                            count+=1
+                        
     
     def  remove_animal(self,animale):
         for fence in zoo.fences:
             if animale in fence.animals:
+                fence.area+=(animale.height*animale.width)
                 fence.animals.remove(animale)
-                if fence.area+(animale.height*animale.width)>fence.maxarea:
-                    fence.area=fence.maxarea
-                else:
-                    fence.area+=(animale.height*animale.width)
     
     def feed(self,animale):
         for fence in zoo.fences:
             if animale in fence.animals:
                 for animal in fence.animals:
                     if animal==animale:
-                        if ((((animal.height)/100)*102)+(((animal.width)/100)*102))<fence.area:
+                        fence.area-=(animal.height*animal.width)
+                        if ((((animal.height)/100)*102)*(((animal.width)/100)*102))<fence.area:
                             animal.healt=(((animal.healt)/100)*101)
                             animal.height=(((animal.height)/100)*102)
                             animal.width=(((animal.width)/100)*102)
+                            fence.area+=(animal.height*animal.width)
+                            
     
     def clean(self,fence):
-        if fence.area==0:
+        if fence.area==0 or fence.area==fence.maxarea:
             return fence.maxarea
         else:
             tempo=fence.area/(fence.maxarea-fence.area)
