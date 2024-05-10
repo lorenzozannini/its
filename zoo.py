@@ -82,7 +82,8 @@ class ZooKeeper:
                             animal.height=round(((animal.height)/100)*102,3)
                             animal.width=round(((animal.width)/100)*102,3)
                             fence.area-=(animal.height*animal.width)
-                            
+                        else:
+                            fence.area-=(animal.height*animal.width)
     
     def clean(self,fence):
         if fence.area==0 or fence.area==fence.maxarea:
