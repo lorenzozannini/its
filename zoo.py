@@ -22,17 +22,17 @@ class Animal:
         self.height=height
         self.width=width
         self.preferred_habitat=habitat
-        self.healt=round(100*(1/age))
+        self.health=round(100*(1/age),3)
     
     def __str__(self) -> str:
-        return f"(name={self.name}, species={self.species}, age={self.age}, Height={self.height}, Width={self.width}, Preferred habitat= {self.preferred_habitat}, Healt={self.healt})"
+        return f"(name={self.name}, species={self.species}, age={self.age})"
 
 class Fence:
-    def __init__(self,area,temperature,habitat,animals=[]):
+    def __init__(self,area,temperature,habitat):
         self.area=area
         self.temperature=temperature
         self.tipo_habitat=habitat
-        self.animals=animals
+        self.animals=[]
         self.maxarea=area
     
     def __str__(self):
@@ -54,7 +54,9 @@ class ZooKeeper:
     def add_animal(self,animale):
         count=0
         for fence in zoo.fences:
-            if animale not in fence.animals:
+            if animale in fence.animals:
+                break
+            else:
                 if fence.tipo_habitat ==animale.preferred_habitat:
                     if fence.area>=(animale.height*animale.width):
                         if count==0:
@@ -74,36 +76,34 @@ class ZooKeeper:
             if animale in fence.animals:
                 for animal in fence.animals:
                     if animal==animale:
-                        fence.area-=(animal.height*animal.width)
-                        if ((((animal.height)/100)*102)*(((animal.width)/100)*102))<fence.area:
-                            animal.healt=(((animal.healt)/100)*101)
-                            animal.height=(((animal.height)/100)*102)
-                            animal.width=(((animal.width)/100)*102)
-                            fence.area+=(animal.height*animal.width)
+                        fence.area+=(animal.height*animal.width)
+                        if ((((animal.height)/100)*102)*(((animal.width)/100)*102))<fence.area and (((animal.health)/100)*101)<100:
+                            animal.health=(((animal.health)/100)*101)
+                            animal.height=round(((animal.height)/100)*102,3)
+                            animal.width=round(((animal.width)/100)*102,3)
+                            fence.area-=(animal.height*animal.width)
                             
     
     def clean(self,fence):
         if fence.area==0 or fence.area==fence.maxarea:
             return fence.maxarea
         else:
-            tempo=fence.area/(fence.maxarea-fence.area)
+            tempo=(fence.maxarea-fence.area)/fence.area
             return tempo
-
 
 z=ZooKeeper(name="Lorenzo", surname="Maggi", id=1234)
 f=Fence(area=100, temperature=25, habitat="Continent")
 z1=ZooKeeper(name="Lorenzo", surname="Maggi", id=1234)
 f1=Fence(area=100, temperature=25, habitat="Continent")
-f2=[f,f1]
+f3=Fence(area=100, temperature=25, habitat="Continent")
+f2=[f,f1,f3]
 z2=[z,z1]
 zoo=Zoo(f2,z2)
-scoiattolo=Animal(name="Scoiattolo", species="Blabla", age=25, height=1,width=20,habitat="Continent")
+scoiattolo=Animal(name="Scoiattolo", species="Blabla", age=25, height=10,width=10,habitat="Continent")
 lupo=Animal(name="Lupo", species="Blabla", age=14, height=3,width=8,habitat="Continent")
 z.add_animal(scoiattolo)
 z.add_animal(lupo)
-print(f.__str__())
+print(zoo.describe_zoo())
 z.add_animal(scoiattolo)
 z.feed(scoiattolo)
-print(f.__str__())
-print(z.clean(f))
 print(zoo.describe_zoo())
