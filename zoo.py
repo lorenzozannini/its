@@ -100,7 +100,7 @@ f3=Fence(area=100, temperature=25, habitat="Continent")
 f2=[f,f1,f3]
 z2=[z,z1]
 zoo=Zoo(f2,z2)
-scoiattolo=Animal(name="Scoiattolo", species="Blabla", age=25, height=10,width=10,habitat="Continent")
+scoiattolo=Animal(name="Scoiattolo", species="Blabla", age=25, height=10,width=1,habitat="Continent")
 lupo=Animal(name="Lupo", species="Blabla", age=14, height=3,width=8,habitat="Continent")
 z.add_animal(scoiattolo)
 z.add_animal(lupo)
@@ -108,3 +108,4 @@ print(zoo.describe_zoo())
 z.add_animal(scoiattolo)
 z.feed(scoiattolo)
 print(zoo.describe_zoo())
+print(z.clean(f))
