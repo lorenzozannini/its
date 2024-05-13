@@ -8,7 +8,7 @@ class Restaurant:
     def open_restaurant(self):
         print(self.name,"APERTO!")
     
-ristorante=Restaurant("Sole","Rosso")
+ristorante=Restaurant("Sole" ,"Rosso")
 ristorante.describe_restaurant()
 ristorante.open_restaurant()
 
