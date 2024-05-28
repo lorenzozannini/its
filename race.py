@@ -116,6 +116,7 @@ def lepre(n,pos,sole,e):
                     return 1,e-8
             else:
                 return pos,e
+bonusmalus={10:3,15:-3,20:5,25:-5,40:10,50:-10}
 i=0
 ptar=1
 plep=1
@@ -126,14 +127,10 @@ while True:
     n=random.randint(1,10)
     ptar,etar=tartaruga(n,ptar,sole,etar)
     plep,elep=lepre(n,plep,sole,elep)
-    if ptar==15 or 30 or 45 or 60:
-        ptar-=5
-    if plep==15 or 30 or 45 or 60:
-        plep-=5
-    if ptar==10 or 25 or 50:
-        ptar+=5
-    if plep==10 or 25 or 50:
-        plep+=5
+    if ptar in bonusmalus:
+        ptar+=bonusmalus[ptar]
+    if plep in bonusmalus:
+        plep+=bonusmalus[plep]
     if ptar<70 and plep<70:
         print(posizioni(ptar,plep))
     elif ptar>=70 and plep>=70:
