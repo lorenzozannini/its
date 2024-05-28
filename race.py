@@ -126,6 +126,14 @@ while True:
     n=random.randint(1,10)
     ptar,etar=tartaruga(n,ptar,sole,etar)
     plep,elep=lepre(n,plep,sole,elep)
+    if ptar==15 or 30 or 45 or 60:
+        ptar-=5
+    if plep==15 or 30 or 45 or 60:
+        plep-=5
+    if ptar==10 or 25 or 50:
+        ptar+=5
+    if plep==10 or 25 or 50:
+        plep+=5
     if ptar<70 and plep<70:
         print(posizioni(ptar,plep))
     elif ptar>=70 and plep>=70:
