@@ -20,14 +20,18 @@ class MovieCatalog:
         return self.catalog[director_name]
     
     def serch_movie_by_title(self,title):
+        l=[]
         for movies in self.catalog.values():
             for movie in movies:
-                if title in movie:
-                    return movie
-        return f"Nessun film presente"
+                if movie[0:len(title)]==title:
+                    l.append(movie)
+        if l==[]:
+            return f"Nessun film presente"
+        else:
+            return l
 catalogo=MovieCatalog()
-catalogo.add_movie("ciao","300")
-catalogo.add_movie("ciao","Il buco")
+catalogo.add_movie("ciao","Film1")
+catalogo.add_movie("ciao","Film2")
 print(catalogo.list_directors())
 print(catalogo.get_movie_by_director("ciao"))
-print(catalogo.serch_movie_by_title("buco"))
+print(catalogo.serch_movie_by_title("Film"))
