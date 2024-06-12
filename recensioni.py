@@ -49,11 +49,13 @@ class Media:
         s+=f"Grandioso: {self.rate_percentage(5)}%\n"
         return s
 
+class Film(Media):
+    def __init__(self,title):
+        super().__init__()
+        self.set_title(title)
 
 
-
-film=Media()
-film.set_title("Cars")
+film=Film("Cars")
 film.add_reviews(1)
 film.add_reviews(2)
 film.add_reviews(3)
@@ -66,8 +68,7 @@ film.add_reviews(5)
 film.add_reviews(5)
 print(film.recensione())
 
-film2=Media()
-film2.set_title("Titanic")
+film2=Film("Titanic")
 film2.add_reviews(0)
 film2.add_reviews(9)
 film2.add_reviews(2)
