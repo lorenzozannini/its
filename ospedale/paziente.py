@@ -18,7 +18,7 @@ class Paziente(Persona):
         return self.idCode
     
     def patientInfo(self):
-        super().greet()
+        self.greet()
         print(f"\nID:{self.getidCode()}")
     
 p=Paziente("Mario","Rossi","ABCD")
