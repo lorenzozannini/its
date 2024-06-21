@@ -48,6 +48,23 @@ class PagamentoContanti(Pagamento):
                     else:
                         print(f"{v} moneta da {k} euro")
 
+class PagamentoCartaDiCredito(Pagamento):
+    def __init__(self,nome,data,numero) -> None:
+        self.nome=nome
+        self.data=data
+        self.numero=numero
+    
+    def get(self):
+        return super().get()
+    
+    def set(self, importo):
+        return super().set(importo)
+    
+    def dettagliPagamento(self):
+        print(f"Pagamento di: €{self.get} effettuato con la carta di credito\n"+
+        f"Nome sulla carta: {self.nome}\n"+
+        f"Data di scadenza: {self.data}\n"
+        f"Numero della carta: {self.numero}")
 c=PagamentoContanti()
 c.set(95.25)
 c.dettagliPagamento()
