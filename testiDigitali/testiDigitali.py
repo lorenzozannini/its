@@ -49,7 +49,7 @@ class Email(Documento):
         return text
     
     def writeToFile(self):
-        file=open("testiDigitali/documenti.txt","w")
+        file=open("testiDigitali/documenti.txt","a")
         file.write(self.getText())
         file.close()
     
