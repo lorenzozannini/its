@@ -53,6 +53,33 @@ def combinazione(testo):
             l3.append(l2[i])
         l3.append(l1[-1])
         return l3
+
+def d_combinazione(testo):
+    l1=[]
+    l2=[]
+    l3=[]
+    metà=len(testo)//2
+    if len(testo)%2==0:
+        for i in range(0,len(testo)):
+            if i<metà:
+                l1.append(testo[i])
+            else:
+                l2.append(testo[i])
+        for i in range(0,len(l2)):
+            l3.append(l1[i])
+            l3.append(l2[i])
+        return l3
+    else:
+        for i in range(0,len(testo)):
+            if i<=metà:
+                l1.append(testo[i])
+            else:
+                l2.append(testo[i])
+        for i in range(0,len(l2)):
+            l3.append(l1[i])
+            l3.append(l2[i])
+        l3.append(l1[-1])
+        return l3
         
 class CodificatoreMessaggio(ABC):
     @abstractmethod
@@ -76,7 +103,7 @@ class CifratoreAScorrimento(CodificatoreMessaggio,DecodificatoreMessaggio):
     def decodifica(self, testoCodificato):
         l=[]
         for i in testoCodificato:
-            l.append(carattere(i,self.chiave))
+            l.append(d_carattere(i,self.chiave))
         return str(l)
 
 class CifratoreACombinazione(CodificatoreMessaggio,DecodificatoreMessaggio):
@@ -84,12 +111,16 @@ class CifratoreACombinazione(CodificatoreMessaggio,DecodificatoreMessaggio):
         self.n=n
     
     def codifica(self,testoInChiaro):
-        for i in range(0,self.n):
+        for i in range(self.n):
             testoInChiaro=combinazione(testoInChiaro)
         return testoInChiaro
+    
+    def decodifica(self,testoCodificato):
+        for i in range(self.n+1):
+            testoCodificato=d_combinazione(testoCodificato)
+        return testoCodificato
 
-c=CifratoreAScorrimento(3)
-print(c.codifica("abcd"))
-print(c.decodifica(c.codifica("abcd")))
+
 c1=CifratoreACombinazione(1)
-print(c1.codifica("ciao"))
+print(c1.codifica("paperino"))
+print(c1.decodifica(c1.codifica("paperino")))
