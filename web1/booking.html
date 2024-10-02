@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Form di Registrazione</title>
+        <style>
+            body {
+            margin-left: 30%;
+			margin-right: 30%;
+            font-family: Arial;
+            font-size: 22px;
+            text-align: center;
+            background: #a9d6bf; 
+            }
+		    p {
+			    text-align: left;
+			    color: red;
+		    } 
+		    #btnid {
+			    text-align: center;		
+		    }
+		
+		    input[type = submit], input[type = reset] {
+                background-color: orange; 
+			    font-size: 22px;
+            }		
+        </style>
+    </head>
+    <body>
+        <h1>Modulo di Registrazione</h1>
+        <form action="https://www.booking.com/start.php" method="get">
+            <p>
+                <label for="fname">Nome:</label><br>
+                <input type="text" name="fname">
+            </p>
+            <p>
+                <label for="fcognome">Cognome</label><br>
+                <input type="text" name="fcognome">
+            </p>
+            <p>
+                <label for="fsesso">Sesso</label><br>
+                <input type="radio" name="fsesso" value="1">M
+                <input type="radio" name="fsesso" value="2">F
+            </p>
+            <p>
+                <label for="fcomune">Comune di nascita</label><br>
+                <select name="fcomune">
+                    <option value="RM">Roma</option>
+                    <option value="MI">Milano</option>
+                    <option value="BA">Bari</option>
+                    <option value="TO">Torino</option>
+                    <option value="PE">Pescara</option>
+                    <option value="AS">Ascoli Piceno</option>
+                </select>
+            </p>
+
+            <input type="submit" value="invia dati">
+        </form>
+    </body>
+</html>
