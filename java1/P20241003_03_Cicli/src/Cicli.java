@@ -1,7 +1,9 @@
+import java.util.Scanner;
 
 public class Cicli {
 
 	public static void main(String[] args) {
+		/*
 		for (int i = 0; i < 10; i++) {
 			System.out.println(i);
 		}
@@ -28,6 +30,25 @@ public class Cicli {
 				n+=7;
 			}
 			System.out.print(n+" ");
+		}
+		
+		int n = 4;
+		if (n % 2 == 0) {
+			System.out.println(n + " è un numero pari");
+		} else {
+			System.out.println(n + " è un numero dispari");
+		}
+		*/
+		Scanner leggi = new Scanner(System.in);
+		
+		for (int i=0;i<10;i++) {
+			System.out.print("Inserisci numero-> ");
+			int n=leggi.nextInt();
+			if (n>10) {
+				System.out.println("Numero maggiore di 10");
+			}else{
+				System.out.println("Numero minore di 10");
+			}
 		}
 	}
 
