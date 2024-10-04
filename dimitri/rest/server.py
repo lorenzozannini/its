@@ -2,25 +2,22 @@ from flask import Flask,json,request
 from myjson import *
 
 api=Flask(__name__)
-path="anagrafe.json"
-cittadini=JsonDeserialize(path)
+pAnagrafe="anagrafe.json"
+pUtenti="utenti.json"
+cittadini=JsonDeserialize(pAnagrafe)
+utenti=JsonDeserialize(pUtenti)
 
 @api.route('/add_cittadino',methods=['POST'])
 def GestisciAddCittadino():
-    content_type = request.headers.get('Content-Type')
-    print("Ricevuta chiamata " + content_type)
-    if (content_type == 'application/json'):
-        jsonReq = request.json
-        for c in cittadini.keys():
-            if list(jsonReq.keys())[0] ==c:
-                jsonResp = {"Esito":"200", "Msg":"cittadino gia presente"}
-                return json.dumps(jsonResp)
-        cittadini.update(jsonReq)
-        JsonSerialize(cittadini,path)
-        jsonResp = {"Esito":"200", "Msg":"cittadino aggiunto"}
-        return json.dumps(jsonResp)
-    else:
-        return 'Content-Type not supported!'
+    jsonReq = request.json
+    for c in cittadini.keys():
+        if list(jsonReq.keys())[0] ==c:
+            jsonResp = {"Esito":"200", "Msg":"cittadino gia presente"}
+            return json.dumps(jsonResp)
+    cittadini.update(jsonReq)
+    JsonSerialize(cittadini,pAnagrafe)
+    jsonResp = {"Esito":"200", "Msg":"cittadino aggiunto"}
+    return json.dumps(jsonResp)
 
 @api.route('/read_cittadino',methods=['POST'])
 def GestisciReadCittadino():
@@ -39,8 +36,7 @@ def GestisciUpdateCittadino():
         if cod ==c:
             cittadini[c]=info
             jsonResp = {"Esito":"200", "Msg":"dati cittadino aggiornati"}
-            JsonSerialize(cittadini,path)
-            return json.dumps(jsonResp)
+            JsonSerialize(cittadini,pAnagrafe)
     jsonResp = {"Esito":"200", "Msg":"cittadino non presente"}
     return json.dumps(jsonResp)
 
@@ -51,35 +47,34 @@ def GestisciDeleteCittadino():
         if cod==c:
             del cittadini[cod]
             jsonResp = {"Esito":"200", "Msg":"cittadino rimosso"}
-            JsonSerialize(cittadini,path)
+            JsonSerialize(cittadini,pAnagrafe)
             return json.dumps(jsonResp)
     jsonResp = {"Esito":"200", "Msg":"cittadino non presente"}
     return json.dumps(jsonResp)
 
-@api.route('/login_cittadino',methods=['POST'])
-def GestisciLoginCittadino():
-    cod,info=request.json
-    for c,d in cittadini.items():
-        if cod==c:
-            if info["nome"]==d["nome"]:
-                if info["cognome"]==d["cognome"]:
-                    if info["data nascita"]==d["data nascita"]:
-                        if info["codice fiscale"]==d["codice fiscale"]:
-                            return {"Esito":"200", "Msg":"cittadino autorizzato"}
-                        else:
-                            jsonResp = {"Esito":"200", "Msg":"codice fiscale non corretto"}
-                            return json.dumps(jsonResp)
-                    else:
-                        jsonResp = {"Esito":"200", "Msg":"data di nascita non corretta"}
-                        return json.dumps(jsonResp)
-                else:
-                    jsonResp = {"Esito":"200", "Msg":"cognome non corretto"}
-                    return json.dumps(jsonResp)
-            else:
-                jsonResp = {"Esito":"200", "Msg":"nome non corretto"}
+@api.route('/login',methods=['POST'])
+def GestisciLogin():
+    utente=request.json  
+    for u in utenti:
+        if list(utente.keys())[0]==u:
+            if list(utente.values())[0]==utenti[u]:
+                jsonResp = {"Esito":"200", "Msg":"login eseguito con successo", "login":True}
                 return json.dumps(jsonResp)
-    jsonResp = {"Esito":"200", "Msg":"cittadino non presente"}
+            else:
+                jsonResp = {"Esito":"400", "Msg":"username o password errati", "login":False}
+                return json.dumps(jsonResp)
+    jsonResp = {"Esito":"400", "Msg":"username o password errati", "login":False}
     return json.dumps(jsonResp)
 
-api.run(host="127.0.0.1", port=8080)
+def Login(utente,password):
+    if utente in utenti:
+        if password==utenti[utente]:
+            return True
+        else:
+            return False
+    else:
+        return False
+       
+           
 
+api.run(host="127.0.0.1", port=8080,ssl_context='adhoc')

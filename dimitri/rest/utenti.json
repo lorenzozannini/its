@@ -1,0 +1,10 @@
+{   
+    "mario":{
+        "password":"pwd",
+        "privilegio":"r"
+    },
+    "paolo":{
+        "password":"pwd1",
+        "privilegio":"w"
+    }
+}
