@@ -1,0 +1,11 @@
+99.3. Gli utenti web devono poter consultare la lista degli eventi di spettacoli di una certa tipologia e genere previsti in un certo giorno.
+
+ricerca(ts:TipoSpettacolo,g:Genere,data:date): Eventi[0..*]
+	pre:
+		nessuna
+	post:
+		Sia result l'insieme degli oggetti tali che:
+			-e.data=data
+			-detto s:Spettacolo tale che (e,s):rappresenta dove:
+				-(g,s):gen_spet
+				-(ts,s):tipo_spet
