@@ -35,10 +35,10 @@
         "data nascita": "10/10/2020",
         "codice fiscale": "mr"
     },
-    "MR": {
-        "nome": "Mario",
-        "cognome": "Rossi",
+    "FT10": {
+        "nome": "Francesco",
+        "cognome": "Totti",
         "data nascita": "10/10/2020",
-        "codice fiscale": "MR"
+        "codice fiscale": "FT10"
     }
 }
