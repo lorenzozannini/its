@@ -19,7 +19,7 @@ def Login():
     password=input("Inserisci password: ")
     return {"username":username,"password":password}
 
-"""
+
 while True:
     print("\nOperazioni disponibili:")
     print("1. Login")
@@ -39,8 +39,8 @@ while True:
 
         if response.json()["login"]==True:
             
-            username=list(jsonDataRequest.keys())[0]
-            password=list(jsonDataRequest.values())[0]
+            username=jsonDataRequest["username"]
+            password=jsonDataRequest["password"]
             jsonDatiLogin={"username":username,"password":password}
             if response.json()["privilegio"]=="w":
                 while True:
@@ -100,11 +100,3 @@ while True:
                         sys.exit()
     elif Oper==2:
         sys.exit()
-"""
-
-
-api_url = base_url + "/add_cittadino"
-jsonDataRequest = GetDatiCittadino()
-response = requests.post(api_url,json={"login":{"username":"u","password":"p"},"dati":jsonDataRequest}, verify=False)
-data1 = response.json()
-print(data1)

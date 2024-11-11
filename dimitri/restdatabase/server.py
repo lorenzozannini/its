@@ -4,8 +4,6 @@ import dbclient as db
 
 
 api=Flask(__name__)
-pAnagrafe="anagrafe.json"
-pUtenti="utenti.json"
 cur = db.connect()
 if cur is None:
 	print("Errore connessione al DB")
@@ -17,13 +15,15 @@ def GestisciAddCittadino():
     password=request.json["login"]["password"]
     if Login(username,password)==True:
         dati = request.json["dati"]
-        sQuery=f'insert into cittadini values({dati["codice fiscale"]},{dati["nome"]},{dati["cognome"]},{dati["data nascita"]})'
-        try:
-            db.write_in_db(cur,sQuery)
+        sQuery=f"insert into cittadini values('{dati['codice fiscale']}','{dati['nome']}','{dati['cognome']}','{dati['data nascita']}')"
+        if db.write_in_db(cur,sQuery)==0:
             jsonResp = {"Esito":"200", "Msg":"cittadino aggiunto"}
             return json.dumps(jsonResp)
-        except:
-            jsonResp = {"Esito":"400", "Msg":"cittadino gia presente"}
+        elif db.write_in_db(cur,sQuery)==-2:
+            jsonResp = {"Esito":"400", "Msg":"cittadino già esistente"}
+            return json.dumps(jsonResp)
+        else:
+            jsonResp = {"Esito":"400", "Msg":"ERRORE"}
             return json.dumps(jsonResp)
     else:
         jsonResp = {"Esito":"400", "Msg":"diritti negati"}
@@ -35,12 +35,25 @@ def GestisciReadCittadino():
     password=request.json["login"]["password"]
     if Login(username,password)==True:
         cod=request.json["codF"]
-        for c in cittadini:
-            if cod==c:
-                jsonResp = {"Esito":"200", "Msg":"ok","Dati cittadino":cittadini[c]}
-                return json.dumps(jsonResp)
-        jsonResp = {"Esito":"400", "Msg":"cittadino non presente"}
-        return json.dumps(jsonResp)
+        sQuery=f"select * from cittadini where cittadini.codicefiscale='{cod}'"
+        if db.read_in_db(cur,sQuery)>0:
+            """datiCittadino={}
+            datiCittadino["nome"]=db.read_next_row(cur)[1][1]
+            datiCittadino["cognome"]=db.read_next_row(cur)[1][2]
+            datiCittadino["data di nascita"]=db.read_next_row(cur)[1][3] 
+            """
+            dati=[]
+            for d in db.read_next_row(cur)[1]:
+                dati.append(d)
+            datiCittadino={}
+            datiCittadino["nome"]=dati[1]
+            datiCittadino["cognome"]=dati[2]
+            datiCittadino["data di nascita"]=dati[3].strftime("%m/%d/%Y")
+            jsonResp = {"Esito":"200", "Msg":"ok","Dati cittadino":datiCittadino}
+            return json.dumps(jsonResp)
+        else:
+            jsonResp = {"Esito":"400", "Msg":"ERRORE"}
+            return json.dumps(jsonResp)
     else:
         jsonResp = {"Esito":"400", "Msg":"diritti negati"}
         return json.dumps(jsonResp)
@@ -51,13 +64,13 @@ def GestisciUpdateCittadino():
     password=request.json["login"]["password"]
     if Login(username,password)==True:
         dati=request.json["dati"]
-        for c in cittadini.keys():
-            if dati["codice fiscale"] ==c:
-                cittadini[c]=dati
-                jsonResp = {"Esito":"200", "Msg":"dati cittadino aggiornati"}
-                JsonSerialize(cittadini,pAnagrafe)
-        jsonResp = {"Esito":"400", "Msg":"cittadino non presente"}
-        return json.dumps(jsonResp)
+        sQuery=f"update cittadini set nome='{dati['nome']}',cognome='{dati['cognome']}',datanascita='{dati['data nascita']}' where codicefiscale='{dati['codice fiscale']}'"
+        if db.write_in_db(cur,sQuery)==0:
+            jsonResp = {"Esito":"200", "Msg":"dati cittadino aggiornati"}
+            return json.dumps(jsonResp)
+        else:
+            jsonResp = {"Esito":"400", "Msg":"ERRORE"}
+            return json.dumps(jsonResp)
     else:
         jsonResp = {"Esito":"400", "Msg":"diritti negati"}
         return json.dumps(jsonResp)
@@ -68,14 +81,16 @@ def GestisciDeleteCittadino():
     password=request.json["login"]["password"]
     if Login(username,password)==True:
         cod=request.json["codF"]
-        for c in cittadini:
-            if cod==c:
-                del cittadini[cod]
-                jsonResp = {"Esito":"200", "Msg":"cittadino rimosso"}
-                JsonSerialize(cittadini,pAnagrafe)
-                return json.dumps(jsonResp)
-        jsonResp = {"Esito":"400", "Msg":"cittadino non presente"}
-        return json.dumps(jsonResp)
+        sQuery=f"delete from cittadini where codicefiscale='{cod}'"
+        nQuery="select * from cittadini "
+        ncitt=db.read_in_db(cur,nQuery)
+        db.write_in_db(cur,sQuery)
+        if ncitt>db.read_in_db(cur,nQuery):
+            jsonResp = {"Esito":"200", "Msg":"dati cittadino rimossi correttamente"}
+            return json.dumps(jsonResp)
+        else:
+            jsonResp = {"Esito":"400", "Msg":"ERRORE"}
+            return json.dumps(jsonResp)
     else:
         jsonResp = {"Esito":"400", "Msg":"diritti negati"}
         return json.dumps(jsonResp)
@@ -83,32 +98,19 @@ def GestisciDeleteCittadino():
 @api.route('/login',methods=['POST'])
 def GestisciLogin():
     utente=request.json  
-    for u in utenti:
-        if list(utente.keys())[0]==u:
-            if list(utente.values())[0]==utenti[u]["password"]:
-                if utenti[u]["privilegio"]=="r":
-                    jsonResp = {"Esito":"200", "Msg":"login eseguito con successo", "login":True,"privilegio":"r"}
-                    return json.dumps(jsonResp)
-                elif utenti[u]["privilegio"]=="w":
-                    jsonResp = {"Esito":"200", "Msg":"login eseguito con successo", "login":True,"privilegio":"w"}
-                    return json.dumps(jsonResp)
-            else:
-                jsonResp = {"Esito":"401", "Msg":"username o password errati", "login":False}
-                return json.dumps(jsonResp)
-    jsonResp = {"Esito":"402", "Msg":"username o password errati", "login":False}
-    return json.dumps(jsonResp)
+    sQuery=f"select * from utenti where username='{utente['username']}' and password='{utente['password']}'"
+    if db.read_in_db(cur,sQuery)>0:
+        jsonResp={"Esito":"200", "Msg":"login effettuato correttamente","login":True,"privilegio":db.read_next_row(cur)[1][2]}
+        return json.dumps(jsonResp)
+    else:
+        jsonResp = {"Esito":"402", "Msg":"username o password errati", "login":False}
+        return json.dumps(jsonResp)
 
 def Login(utente,password):
-    """if utente in utenti:
-        if password==utenti[utente]["password"]:
-            return True
-        else:
-            return False
+    sQuery=f"select * from utenti where username='{utente}'and password='{password}'"
+    if db.read_in_db(cur,sQuery)>0: 
+        return True
     else:
         return False
-       """
-    return True
-           
-
 
 api.run(host="127.0.0.1", port=8080,ssl_context='adhoc')
