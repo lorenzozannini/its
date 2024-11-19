@@ -94,7 +94,7 @@ while True:
                     if sOper==1:
                         api_url=base_url+"/read_cittadino"
                         jsonDataRequest = GetCodiceFiscale()
-                        response = requests.post(api_url,json={"login":jsonDatiLogin,"dati":jsonDataRequest}, verify=False)
+                        response = requests.post(api_url,json={"login":jsonDatiLogin,"codF":jsonDataRequest}, verify=False)
                         print(response.json())
                     elif sOper==2:
                         sys.exit()
