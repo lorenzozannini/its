@@ -17,7 +17,8 @@ public class Main {
 		System.out.println(carta4);
 		System.out.println(carta5);
 		for (int i = 0; i < 5; i++) {
-			// Controllo scala reale
+			//coppia,doppia coppia,tris,full,scala,poker,scala colore,scala reale
+			
 		}
 	}
 
